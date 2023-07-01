@@ -65,7 +65,7 @@ const styles: CSSProperties = {
         padding: '16px',
         marginRight: '24px',
         backgroundColor: '#55ACC8',
-        color: 'fff',
+        color: '#fff',
         borderRadius: '8px',
         textDecoration:'none',
     },
