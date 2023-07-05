@@ -31,14 +31,14 @@ export const tasksState = atom<Task[]> ({
         title: 'Decide Plans for Lebaran holidays',
         detail: 'Trip with family?',
         dueDate: '2023-04-21',
-        progressOrder: 2,
+        progressOrder: 3,
     },
     {
         id: 5,
         title: 'Develop a React Project',
         detail: "Develop a Todo management app and ask Guru Domba's review",
         dueDate: '2023-05-02',
-        progressOrder: 3,
+        progressOrder: 4,
     },
     {
         id: 6,
