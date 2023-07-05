@@ -1,11 +1,26 @@
 import React from 'react'
 import type { Task, CSSProperties } from '../../../../types'
 import { TASK_PROGRESS_ID } from '../../../../constants/app'
+import { useRecoilState } from 'recoil'
+import{ tasksState } from '../../TaskAtoms'
 
 interface TaskCardProps {
     task: Task
 }
+const getIconStyle = (progressOrder: number):
+    React.CSSProperties => {
+        const color: '#55C89F' | '#C5C5C5' = 
+            progressOrder === TASK_PROGRESS_ID.COMPLETED ? '#55C89F' : '#C5C5C5'
+        
+        const cursor: 'default' | 'pointer' = 
+            progressOrder === TASK_PROGRESS_ID.COMPLETED ? 'default' : 'pointer'
 
+        return {
+            color,
+            cursor,
+            fontSize: '28px',
+        }
+    }
 const getArrowPositionStyle = (progressOrder: number):React.CSSProperties => {
     const justifyContentValue: 'flex-end' | 'space-between' = progressOrder === TASK_PROGRESS_ID.NOT_STARTED
         ? 'flex-end'
@@ -16,10 +31,25 @@ const getArrowPositionStyle = (progressOrder: number):React.CSSProperties => {
     }
 }
 const TaskCard = ({ task }: TaskCardProps): JSX.Element => {
+    const [tasks, setTasks] = useRecoilState<Task[]>(tasksState)
+
+    const completedTask = (taskId: number): void => {
+        const updatedTasks: Task[] = tasks.map((task) =>
+        task.id === taskId
+            ? { ...task, progressOrder: TASK_PROGRESS_ID.COMPLETED}
+            : task,
+        )
+        setTasks(updatedTasks)
+    }
     return(
         <div style={styles.taskCard}>
             <div style={styles.taskIcons}>
-                <div className="material-icons">
+                <div 
+                    className="material-icons"
+                    style={getIconStyle(task.progressOrder)}
+                    onClick={(): void => {
+                        completedTask(task.id)
+                    }}>
                     check_circle
                 </div>
                 <div className="material-icons" style={styles.menuIcon}>
@@ -28,6 +58,7 @@ const TaskCard = ({ task }: TaskCardProps): JSX.Element => {
             </div>
             <p style={styles.taskTitle}>{task.title}</p>
             <div>
+                <h1 style={styles.detail}>{task.detail}</h1>
                 <p>Due on {task.dueDate}</p>
             </div>
             <div style={getArrowPositionStyle(task.progressOrder)}>
@@ -51,6 +82,9 @@ const styles: CSSProperties = {
         fontSize: '20px',
         overflowWrap: 'anywhere',
         position: 'relative',
+    },
+    detail:{
+        fontSize: '18px',
     },
     taskIcons: {
         display: 'flex',
