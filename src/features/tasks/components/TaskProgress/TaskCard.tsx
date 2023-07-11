@@ -41,6 +41,14 @@ const TaskCard = ({ task }: TaskCardProps): JSX.Element => {
         )
         setTasks(updatedTasks)
     }
+    const moveTaskCard = (taskId: number, directionNumber: 1 | -1): void => {
+        const moveTask: Task [] = tasks.map((task)=>
+        task.id === taskId
+            ? { ...task, progressOrder: task.progressOrder + directionNumber }
+            : task,
+        )
+        setTasks(moveTask)
+    }
     return(
         <div style={styles.taskCard}>
             <div style={styles.taskIcons}>
@@ -63,10 +71,20 @@ const TaskCard = ({ task }: TaskCardProps): JSX.Element => {
             </div>
             <div style={getArrowPositionStyle(task.progressOrder)}>
                 {task.progressOrder !== TASK_PROGRESS_ID.NOT_STARTED && (
-                    <button className="material-icons">chevron_left</button>
+                    <button 
+                        className="material-icons"
+                        onClick={(): void =>{
+                            moveTaskCard(task.id, -1)
+                        }}
+                        >chevron_left</button>
                 )}
                 {task.progressOrder !== TASK_PROGRESS_ID.COMPLETED && (
-                    <button className="material-icons">chevron_right</button>
+                    <button 
+                        className="material-icons"
+                        onClick={(): void =>{
+                            moveTaskCard(task.id, 1)
+                        }}
+                        >chevron_right</button>
                 )}
             </div>
         </div>
